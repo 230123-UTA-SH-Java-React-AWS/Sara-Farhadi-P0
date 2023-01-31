@@ -1,14 +1,16 @@
-package com.project0.model;
-
+package model;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Employee {
 
-    public Employee(){};
-
     private String employeeEmail;
     private int employeePassword;
+
+    // public Employee(String employeeEmail, int employeePassword) {
+    //     this.employeeEmail = employeeEmail;
+    //     this.employeePassword = employeePassword;
+    // };
 
     public String getEmployeeEmail() {
         return employeeEmail;

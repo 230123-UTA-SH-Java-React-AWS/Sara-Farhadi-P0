@@ -1,8 +1,7 @@
-package com.project0.service;
-
+package service;
 import java.io.IOException;
-import com.project0.model.Employee;
-import com.project0.repository.EmployeeRepository;
+import model.Employee;
+import repository.EmployeeRepository;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;

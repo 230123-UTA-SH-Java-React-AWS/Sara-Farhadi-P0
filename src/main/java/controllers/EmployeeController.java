@@ -1,5 +1,4 @@
-package com.project0.controllers;
-
+package controllers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -8,9 +7,11 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import com.project0.service.EmployeeService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
+import java.util.ArrayList;
+import java.util.List;
+import service.EmployeeService;
 
 public class EmployeeController implements HttpHandler {
 
@@ -21,9 +22,20 @@ public class EmployeeController implements HttpHandler {
             case "POST":
                 postRequest(exchange);
                 break;
+            case "GET":
+               
+                break;
+            case "PUT":
+               
+                break;
+            case "DELETE":
+
+                break;
             default:
+            
                 break;
         }
+        System.out.println();
     }
 
     private void postRequest(HttpExchange exchange) throws IOException {
@@ -37,8 +49,8 @@ public class EmployeeController implements HttpHandler {
             }
         } 
         exchange.sendResponseHeaders(200, textBuilder.toString().getBytes().length);
-        EmployeeService pokeService = new EmployeeService();
-        pokeService.saveToEmployeeBox(textBuilder.toString());
+        EmployeeService employeeService = new EmployeeService();
+        employeeService.saveToEmployeeBox(textBuilder.toString());
         OutputStream os = exchange.getResponseBody();
         os.write(textBuilder.toString().getBytes());
         os.close();
