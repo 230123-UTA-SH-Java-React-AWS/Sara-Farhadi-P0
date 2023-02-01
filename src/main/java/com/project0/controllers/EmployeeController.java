@@ -1,4 +1,4 @@
-package controllers;
+package com.project0.controllers;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -7,11 +7,12 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+
+import com.project0.service.EmployeeService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 import java.util.ArrayList;
 import java.util.List;
-import service.EmployeeService;
 
 public class EmployeeController implements HttpHandler {
 
@@ -32,7 +33,7 @@ public class EmployeeController implements HttpHandler {
 
                 break;
             default:
-            
+
                 break;
         }
         System.out.println();

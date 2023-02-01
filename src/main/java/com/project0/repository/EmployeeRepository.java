@@ -1,14 +1,16 @@
-package repository;
+package com.project0.repository;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
+
+import com.project0.model.Employee;
+import com.project0.utils.ConnectionUtil;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import utils.ConnectionUtil;
-import model.Employee;
 
 public class EmployeeRepository {
 
@@ -17,9 +19,9 @@ public class EmployeeRepository {
         String jsonObject = "";
         try{
             jsonObject = mapper.writeValueAsString(employee);
-            File employeeFile = new File("./src/main/java/repository/employee.json");
+            File employeeFile = new File("./src/main/java/com/project0/repository/employee.json");
             employeeFile.createNewFile();
-            FileWriter writer = new FileWriter("./src/main/java/repository/employee.json");
+            FileWriter writer = new FileWriter("./src/main/java/com/project0/repository/employee.json");
             writer.write(jsonObject);
             writer.close();
         } catch (JsonGenerationException e) {
