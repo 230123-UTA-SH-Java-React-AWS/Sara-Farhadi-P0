@@ -5,16 +5,19 @@ import java.io.IOException;
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
-
 import com.project0.model.Employee;
 import com.project0.utils.ConnectionUtil;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeRepository {
 
-    public void SaveToJson(Employee employee){
+    public void SaveToJson(Employee employee)
+    {
         ObjectMapper mapper = new ObjectMapper();
         String jsonObject = "";
         try{
@@ -41,13 +44,31 @@ public class EmployeeRepository {
         String sql = "insert into employee (employeeEmail, employeePassword) values (?, ?)";
         try (Connection con = ConnectionUtil.getConnection()) {
             PreparedStatement prstmt = con.prepareStatement(sql);
-            prstmt.setString(1, employee.getEmployeeEmail());
-            prstmt.setInt(2, employee.getEmployeePassword());
+            prstmt.setString(1, employee.getEmail());
+            prstmt.setString(2, employee.getPassword());
             prstmt.execute();
         } catch (Exception e) {
-            //TODO: handle exception
             e.printStackTrace();
         }
+    }
+
+    public List<Employee> getAllEmployee() 
+    {
+        String sql = "select * from employee";
+        List<Employee> listOfEmployee = new ArrayList<Employee>();
+        try (Connection con = ConnectionUtil.getConnection()) {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                Employee newEmployee = new Employee();
+                newEmployee.setEmail(rs.getString(1));
+                newEmployee.setPassword(rs.getString(2));
+                listOfEmployee.add(newEmployee);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return listOfEmployee;
     }
     
 }

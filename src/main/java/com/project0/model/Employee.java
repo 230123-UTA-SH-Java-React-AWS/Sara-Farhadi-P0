@@ -4,28 +4,25 @@ import java.util.List;
 
 public class Employee {
 
-    private String employeeEmail;
-    private int employeePassword;
+    private String email;
+    private String password;
 
-    // public Employee(String employeeEmail, int employeePassword) {
-    //     this.employeeEmail = employeeEmail;
-    //     this.employeePassword = employeePassword;
-    // };
+    public Employee() { };
 
-    public String getEmployeeEmail() {
-        return employeeEmail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setEmployeeEmail(String employeeEmail) {
-        this.employeeEmail = employeeEmail;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    public int getEmployeePassword() {
-        return employeePassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setEmployeePassword(int employeePassword) {
-        this.employeePassword = employeePassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
     
     
