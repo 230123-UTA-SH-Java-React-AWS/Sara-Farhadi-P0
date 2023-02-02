@@ -41,11 +41,11 @@ public class EmployeeRepository {
 
     public void Save(Employee employee)
     {
-        String sql = "insert into employee (employeeEmail, employeePassword) values (?, ?)";
+        String sql = "insert into employee (userEmail, userPassword) values (?, ?)";
         try (Connection con = ConnectionUtil.getConnection()) {
             PreparedStatement prstmt = con.prepareStatement(sql);
-            prstmt.setString(1, employee.getEmail());
-            prstmt.setString(2, employee.getPassword());
+            prstmt.setString(1, employee.getUserEmail());
+            prstmt.setString(2, employee.getUserPassword());
             prstmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
@@ -61,8 +61,8 @@ public class EmployeeRepository {
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 Employee newEmployee = new Employee();
-                newEmployee.setEmail(rs.getString(1));
-                newEmployee.setPassword(rs.getString(2));
+                newEmployee.setUserEmail(rs.getString(1));
+                newEmployee.setUserPassword(rs.getString(2));
                 listOfEmployee.add(newEmployee);
             }
         } catch (Exception e) {

@@ -1,29 +1,24 @@
 package com.project0.model;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Employee {
 
-    private String email;
-    private String password;
-
-    public Employee() { };
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private String userEmail;
+    private String userPassword;
     
+    public String getUserPassword() {
+        return userPassword;
+    }
+
+    public void setUserPassword(String userPassword) {
+        this.userPassword = userPassword;
+    }
+
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
+    }
     
 }

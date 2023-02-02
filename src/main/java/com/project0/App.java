@@ -1,12 +1,8 @@
 package com.project0;
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
 import com.sun.net.httpserver.HttpServer;
 import com.project0.controllers.EmployeeController;
-import com.project0.model.Employee;
-import com.project0.repository.EmployeeRepository;
 import com.sun.net.httpserver.HttpHandler;
 
 public final class App {

@@ -2,7 +2,7 @@ package com.project0.model;
 
 public class Ticket {
     private int ticketID;
-    private int amount;
+    private double amount;
     private String description;
     private String status;
 
@@ -14,7 +14,7 @@ public class Ticket {
         this.ticketID = ticketID;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(double amount) {
         this.amount = amount;
     }
 
@@ -26,7 +26,7 @@ public class Ticket {
         this.status = status;
     }
 
-    public int getAmount() {
+    public double getAmount() {
         return amount;
     }
 

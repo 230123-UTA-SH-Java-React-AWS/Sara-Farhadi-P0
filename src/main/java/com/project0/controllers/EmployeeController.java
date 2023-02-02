@@ -10,8 +10,6 @@ import java.nio.charset.StandardCharsets;
 import com.project0.service.EmployeeService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EmployeeController implements HttpHandler {
 
