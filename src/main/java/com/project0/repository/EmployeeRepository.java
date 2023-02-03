@@ -64,16 +64,21 @@ public class EmployeeRepository {
         String sql = "select * from employee where userEmail = ?";
         Employee CurrentUser = new Employee();
         try (Connection con = ConnectionUtil.getConnection()) {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            if (rs.next() && employee.getUserPassword().equals(rs.getString(2))) {
+            PreparedStatement prstmt = con.prepareStatement(sql);
+            prstmt.setString(1, employee.getUserEmail());
+            ResultSet rs = prstmt.executeQuery();
+            if (!rs.next()) {
+                return null;
+            }
+            else if (employee.getUserPassword().equals(rs.getString(2))) {
                 CurrentUser.setUserEmail(rs.getString(1));
                 CurrentUser.setUserPassword(rs.getString(2));
                 CurrentUser.setUserRole(rs.getString(3));
                 //CurrentUser.setTicket(getTicketByUserEmail(CurrentUser.setUserEmail()));
+                // = rs;
             }
             rs.close();
-            stmt.close();
+            prstmt.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

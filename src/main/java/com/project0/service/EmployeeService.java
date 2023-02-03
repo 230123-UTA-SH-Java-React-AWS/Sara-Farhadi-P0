@@ -61,10 +61,9 @@ public class EmployeeService {
         return jsonString;
     }
 
-    // public Employee getCurrentEmployee(String employeeJson) {
-    //     Employee currEmployee = repo.login(employeeJson);
-    //     String jsonString = "";
-    //     return currEmployee;
-    // }
+    public Employee getCurrentEmployee(Employee currentUser) {
+        Employee currentEmployee = repo.login(currentUser);
+        return currentEmployee;
+    }
 
 }

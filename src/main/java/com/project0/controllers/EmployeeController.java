@@ -7,6 +7,10 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+
+import org.codehaus.jackson.map.ObjectMapper;
+
+import com.project0.model.Employee;
 import com.project0.service.EmployeeService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -58,20 +62,32 @@ public class EmployeeController implements HttpHandler {
 
     private void getRequest(HttpExchange exchange) throws IOException 
     {
-        // InputStream is = exchange.getRequestBody();
-        // StringBuilder textBuilder = new StringBuilder();
-        // try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
-        //     int c = 0;
-        //     while ((c = reader.read()) != -1) 
-        //     {
-        //         textBuilder.append((char)c);
-        //     }
-        // } 
-        // String jsonCurrentUser = serv.getCurrentEmployee();
-        // exchange.sendResponseHeaders(200, jsonCurrentUser.getBytes().length);
-        // OutputStream os = exchange.getResponseBody();
-        // os.write(jsonCurrentUser.getBytes());
-        // os.close();
+        String response = "";
+        InputStream is = exchange.getRequestBody();
+        StringBuilder textBuilder = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
+        OutputStream os = exchange.getResponseBody();
+        try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
+            int c = 0;
+            while ((c = reader.read()) != -1) 
+            {
+                textBuilder.append((char)c);
+            }
+        } 
+        Employee userInfo = mapper.readValue(textBuilder.toString(), Employee.class);
+        Employee currentUser = serv.getCurrentEmployee(userInfo);
+        if (currentUser == null) {
+            response = "Incorrect Email or Password";
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            os.write(response.getBytes());
+        }
+        else if (currentUser != null) {
+            response = "Loged In Successfully";
+            exchange.sendResponseHeaders(200, response.toString().getBytes().length);
+           // os.write(currentUser.toString().getBytes()); 
+           os.write(mapper.writeValueAsString(currentUser).getBytes());
+        }
+        os.close();
     }
 
     private void getAllRequest(HttpExchange exchange) throws IOException 
