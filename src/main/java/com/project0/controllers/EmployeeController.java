@@ -82,10 +82,12 @@ public class EmployeeController implements HttpHandler {
             os.write(response.getBytes());
         }
         else if (currentUser != null) {
-            response = "Loged In Successfully";
-            exchange.sendResponseHeaders(200, response.toString().getBytes().length);
+            response = mapper.writeValueAsString(currentUser);
+            //the second parameter of sendResponseHeader determines the size of the message we are delivering
+            exchange.sendResponseHeaders(200, response.getBytes().length);
            // os.write(currentUser.toString().getBytes()); 
-           os.write(mapper.writeValueAsString(currentUser).getBytes());
+
+           os.write(response.getBytes());
         }
         os.close();
     }
