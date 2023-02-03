@@ -9,24 +9,25 @@ import com.project0.model.Employee;
 import com.project0.repository.EmployeeRepository;
 
 public class EmployeeService {
-    
-    public void login()
-    {
 
-    }
+    private final EmployeeRepository repo = new EmployeeRepository();
+    private final ObjectMapper mapper = new ObjectMapper();
+    
+    // public void login()
+    // {
+
+    // }
 
     public void findEmployee()
     {
 
     }
 
-    public void saveToEmployeeBox(String employeeJson)
+    public void sendToEmployeeTable(String employeeJson)
     {
-        EmployeeRepository repo = new EmployeeRepository();
-        ObjectMapper mapper = new ObjectMapper();
         try {
             Employee newEmployee = mapper.readValue(employeeJson, Employee.class);
-            repo.Save(newEmployee);
+            repo.registration(newEmployee);
         } catch (JsonParseException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -39,9 +40,8 @@ public class EmployeeService {
         }
     }
 
-    public String getAllEmployee()
+    public String getEmployees()
     {
-        EmployeeRepository repo = new EmployeeRepository();
         List<Employee> listOfEmployee = repo.getAllEmployee();
         ObjectMapper map = new ObjectMapper();
         String jsonString = "";
@@ -60,5 +60,11 @@ public class EmployeeService {
         }
         return jsonString;
     }
+
+    // public Employee getCurrentEmployee(String employeeJson) {
+    //     Employee currEmployee = repo.login(employeeJson);
+    //     String jsonString = "";
+    //     return currEmployee;
+    // }
 
 }

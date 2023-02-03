@@ -1,24 +1,10 @@
 package com.project0.model;
 
-public class Employee {
+public class Employee extends User { 
 
-    private String userEmail;
-    private String userPassword;
-    
-    public String getUserPassword() {
-        return userPassword;
-    }
-
-    public void setUserPassword(String userPassword) {
-        this.userPassword = userPassword;
-    }
-
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+    public Employee() 
+    {
+        userRole = "Employee";
     }
     
 }

@@ -13,6 +13,8 @@ import com.sun.net.httpserver.HttpHandler;
 
 public class EmployeeController implements HttpHandler {
 
+    private final EmployeeService serv = new EmployeeService();
+
     @Override
     public void handle(HttpExchange exchange) throws IOException 
     {
@@ -25,7 +27,6 @@ public class EmployeeController implements HttpHandler {
                 getRequest(exchange);
                 break;
             case "PUT":
-                putRequest(exchange);
                 break;
             case "DELETE":
                 break;
@@ -34,26 +35,6 @@ public class EmployeeController implements HttpHandler {
                 break;
         }
         System.out.println();
-    }
-
-    private void putRequest(HttpExchange exchange) throws IOException 
-    {
-        // EmployeeService serv = new EmployeeService();
-        // String jsonCurrentList = serv.getAllEmployee();
-        // exchange.sendResponseHeaders(200, jsonCurrentList.getBytes().length);
-        // OutputStream os = exchange.getResponseBody();
-        // os.write(jsonCurrentList.getBytes());
-        // os.close();
-    }
-
-    private void getRequest(HttpExchange exchange) throws IOException 
-    {
-        EmployeeService serv = new EmployeeService();
-        String jsonCurrentList = serv.getAllEmployee();
-        exchange.sendResponseHeaders(200, jsonCurrentList.getBytes().length);
-        OutputStream os = exchange.getResponseBody();
-        os.write(jsonCurrentList.getBytes());
-        os.close();
     }
 
     private void postRequest(HttpExchange exchange) throws IOException 
@@ -69,9 +50,36 @@ public class EmployeeController implements HttpHandler {
         } 
         exchange.sendResponseHeaders(200, textBuilder.toString().getBytes().length);
         EmployeeService employeeService = new EmployeeService();
-        employeeService.saveToEmployeeBox(textBuilder.toString());
+        employeeService.sendToEmployeeTable(textBuilder.toString());
         OutputStream os = exchange.getResponseBody();
         os.write(textBuilder.toString().getBytes());
+        os.close();
+    }
+
+    private void getRequest(HttpExchange exchange) throws IOException 
+    {
+        // InputStream is = exchange.getRequestBody();
+        // StringBuilder textBuilder = new StringBuilder();
+        // try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
+        //     int c = 0;
+        //     while ((c = reader.read()) != -1) 
+        //     {
+        //         textBuilder.append((char)c);
+        //     }
+        // } 
+        // String jsonCurrentUser = serv.getCurrentEmployee();
+        // exchange.sendResponseHeaders(200, jsonCurrentUser.getBytes().length);
+        // OutputStream os = exchange.getResponseBody();
+        // os.write(jsonCurrentUser.getBytes());
+        // os.close();
+    }
+
+    private void getAllRequest(HttpExchange exchange) throws IOException 
+    {
+        String jsonCurrentList = serv.getEmployees();
+        exchange.sendResponseHeaders(200, jsonCurrentList.getBytes().length);
+        OutputStream os = exchange.getResponseBody();
+        os.write(jsonCurrentList.getBytes());
         os.close();
     }
 

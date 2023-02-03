@@ -6,10 +6,12 @@ import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import com.project0.model.Employee;
+import com.project0.model.Ticket;
 import com.project0.utils.ConnectionUtil;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,17 +41,43 @@ public class EmployeeRepository {
         }
     }
 
-    public void Save(Employee employee)
+    public void registration(Employee employee)
     {
-        String sql = "insert into employee (userEmail, userPassword) values (?, ?)";
+        String sql = "insert into employee (userEmail, userPassword, userRole) values (?, ?, ?)";
         try (Connection con = ConnectionUtil.getConnection()) {
             PreparedStatement prstmt = con.prepareStatement(sql);
-            prstmt.setString(1, employee.getUserEmail());
-            prstmt.setString(2, employee.getUserPassword());
+            if (employeeExist(employee) == false){
+                prstmt.setString(1, employee.getUserEmail());
+                prstmt.setString(2, employee.getUserPassword());
+                prstmt.setString(3, employee.getUserRole());
+            } else {
+                System.out.println("Employee Already Exist!");
+            }
             prstmt.execute();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Employee login(Employee employee) 
+    {
+        String sql = "select * from employee where userEmail = ?";
+        Employee CurrentUser = new Employee();
+        try (Connection con = ConnectionUtil.getConnection()) {
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next() && employee.getUserPassword().equals(rs.getString(2))) {
+                CurrentUser.setUserEmail(rs.getString(1));
+                CurrentUser.setUserPassword(rs.getString(2));
+                CurrentUser.setUserRole(rs.getString(3));
+                //CurrentUser.setTicket(getTicketByUserEmail(CurrentUser.setUserEmail()));
+            }
+            rs.close();
+            stmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return CurrentUser;
     }
 
     public List<Employee> getAllEmployee() 
@@ -63,12 +91,36 @@ public class EmployeeRepository {
                 Employee newEmployee = new Employee();
                 newEmployee.setUserEmail(rs.getString(1));
                 newEmployee.setUserPassword(rs.getString(2));
+                newEmployee.setUserRole(rs.getString(3));
+              //  newPokemon.setAbilities(getAbilityByPokeId(newPokemon.getPokeId()));
                 listOfEmployee.add(newEmployee);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return listOfEmployee;
+    }
+
+    // private List<Ticket> getTicketByPokeId(int pokeid)
+    // {
+    //     //Implementation details
+    //     return new ArrayList<>();
+    // }
+
+    private boolean employeeExist (Employee employee) throws SQLException
+    {
+        boolean existingUser = true;
+        Connection con = ConnectionUtil.getConnection();
+        String sql = "select userEmail from employee where userEmail= ? ";
+        PreparedStatement prepStmt = con.prepareStatement(sql);
+        prepStmt.setString(1, employee.getUserEmail());
+        ResultSet rs = prepStmt.executeQuery();
+        if (rs.next()){
+            existingUser = true;
+        } else {
+            existingUser = false;
+        }
+        return existingUser;
     }
     
 }

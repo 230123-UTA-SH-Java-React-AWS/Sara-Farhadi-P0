@@ -18,7 +18,6 @@ public class ConnectionUtil {
                 return con;
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         String url, user, pass;
@@ -28,7 +27,6 @@ public class ConnectionUtil {
         try {
             con = DriverManager.getConnection(url, user, pass);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
             System.out.println("WRONG PASSWORD OR URL");
         }
