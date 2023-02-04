@@ -78,15 +78,12 @@ public class EmployeeController implements HttpHandler {
         Employee currentUser = serv.getCurrentEmployee(userInfo);
         if (currentUser == null) {
             response = "Incorrect Email or Password";
-            exchange.sendResponseHeaders(200, response.getBytes().length);
+            exchange.sendResponseHeaders(404, response.getBytes().length);
             os.write(response.getBytes());
         }
         else if (currentUser != null) {
             response = mapper.writeValueAsString(currentUser);
-            //the second parameter of sendResponseHeader determines the size of the message we are delivering
             exchange.sendResponseHeaders(200, response.getBytes().length);
-           // os.write(currentUser.toString().getBytes()); 
-
            os.write(response.getBytes());
         }
         os.close();

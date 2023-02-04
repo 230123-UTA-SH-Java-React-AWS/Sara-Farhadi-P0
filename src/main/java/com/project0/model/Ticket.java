@@ -5,9 +5,13 @@ public class Ticket {
     private double amount;
     private String description;
     private String status;
+    private boolean processed;
+    public static final String[] statusOptions = {"Pending", "Approved", "Denied"};
 
     public Ticket(){
         //ticketID = null;
+        this.status = statusOptions[0];
+        this.processed = false;
     }
 
     public void setTicketID(int ticketID) {
@@ -40,6 +44,14 @@ public class Ticket {
 
     public String getStatus() {
         return status;
+    }
+
+    public boolean isProcessed() {
+        return processed;
+    }
+
+    public void setProcessed(boolean processed) {
+        this.processed = processed;
     }
 
 }

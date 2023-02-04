@@ -33,5 +33,10 @@ public class User {
     public void setUserRole(String userRole) {
         this.userRole = userRole;
     }
+
+    @Override
+    public String toString() {
+        return "Employee [Email: " + userEmail + ", Password: " + userPassword + ", Role: " + userRole + "]";
+    }
     
 }
