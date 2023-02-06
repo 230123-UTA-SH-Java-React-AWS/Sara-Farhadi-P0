@@ -13,6 +13,7 @@ public final class App {
         System.out.println("Starting backend server...");
         HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
         server.createContext("/employee", new EmployeeController());
+        server.createContext("/ticket", new EmployeeController());
         server.setExecutor(null);
         server.start();
     }

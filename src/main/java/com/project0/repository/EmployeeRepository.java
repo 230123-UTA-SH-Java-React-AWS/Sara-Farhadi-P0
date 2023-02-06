@@ -30,26 +30,24 @@ public class EmployeeRepository {
             writer.write(jsonObject);
             writer.close();
         } catch (JsonGenerationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
 
     public void registration(Employee employee)
     {
-        String sql = "insert into employee (userEmail, userPassword, userRole) values (?, ?, ?)";
+        String sql = "insert into employee (userID, userEmail, userPassword, userRole) values (?, ?, ?, ?)";
         try (Connection con = ConnectionUtil.getConnection()) {
             PreparedStatement prstmt = con.prepareStatement(sql);
             if (employeeExist(employee) == false){
-                prstmt.setString(1, employee.getUserEmail());
-                prstmt.setString(2, employee.getUserPassword());
-                prstmt.setString(3, employee.getUserRole());
+                prstmt.setString(1, employee.getUserID());
+                prstmt.setString(2, employee.getUserEmail());
+                prstmt.setString(3, employee.getUserPassword());
+                prstmt.setString(4, employee.getUserRole());
             } else {
                 System.out.println("Employee Already Exist!");
             }
@@ -70,12 +68,12 @@ public class EmployeeRepository {
             if (!rs.next()) {
                 return null;
             }
-            else if (employee.getUserPassword().equals(rs.getString(2))) {
-                CurrentUser.setUserEmail(rs.getString(1));
-                CurrentUser.setUserPassword(rs.getString(2));
-                CurrentUser.setUserRole(rs.getString(3));
+            else if (employee.getUserPassword().equals(rs.getString(3))) {
+                CurrentUser.setUserID(rs.getString("userID"));
+                CurrentUser.setUserEmail(rs.getString("userEmail"));
+                CurrentUser.setUserPassword(rs.getString("userPassword"));
+                CurrentUser.setUserRole(rs.getString("userRole"));
                 //CurrentUser.setTicket(getTicketByUserEmail(CurrentUser.setUserEmail()));
-                // = rs;
             }
             rs.close();
             prstmt.close();
@@ -93,12 +91,13 @@ public class EmployeeRepository {
             Statement stmt = con.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                Employee newEmployee = new Employee();
-                newEmployee.setUserEmail(rs.getString(1));
-                newEmployee.setUserPassword(rs.getString(2));
-                newEmployee.setUserRole(rs.getString(3));
+                Employee employees = new Employee();
+                employees.setUserID(rs.getString(1));
+                employees.setUserEmail(rs.getString(2));
+                employees.setUserPassword(rs.getString(3));
+                employees.setUserRole(rs.getString(4));
               //  newPokemon.setAbilities(getAbilityByPokeId(newPokemon.getPokeId()));
-                listOfEmployee.add(newEmployee);
+                listOfEmployee.add(employees);
             }
         } catch (Exception e) {
             e.printStackTrace();

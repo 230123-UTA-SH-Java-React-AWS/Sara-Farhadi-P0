@@ -1,13 +1,24 @@
 package com.project0.model;
+import java.text.SimpleDateFormat;
 
 public class User {
-    
+
+    private String userID;
     private String userEmail;
     private String userPassword;
     protected String userRole;
 
     protected User() {
         userRole = "Employee";
+        userID = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
     
     public String getUserPassword() {
@@ -36,7 +47,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "Employee [Email: " + userEmail + ", Password: " + userPassword + ", Role: " + userRole + "]";
+        return "Employee [User ID: " + userID + ", Email: " + userEmail + ", Password: " + userPassword + ", Role: " + userRole + "]";
     }
     
 }

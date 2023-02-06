@@ -12,16 +12,6 @@ public class EmployeeService {
 
     private final EmployeeRepository repo = new EmployeeRepository();
     private final ObjectMapper mapper = new ObjectMapper();
-    
-    // public void login()
-    // {
-
-    // }
-
-    public void findEmployee()
-    {
-
-    }
 
     public void sendToEmployeeTable(String employeeJson)
     {
@@ -29,13 +19,10 @@ public class EmployeeService {
             Employee newEmployee = mapper.readValue(employeeJson, Employee.class);
             repo.registration(newEmployee);
         } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }
@@ -47,15 +34,11 @@ public class EmployeeService {
         String jsonString = "";
         try {
             jsonString = map.writeValueAsString(listOfEmployee);
-
         } catch (JsonGenerationException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return jsonString;

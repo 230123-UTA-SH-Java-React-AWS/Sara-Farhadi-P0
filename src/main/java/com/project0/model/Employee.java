@@ -4,12 +4,11 @@ import java.util.List;
 
 public class Employee extends User { 
 
-    private ArrayList<Ticket> tickets;
+    private ArrayList<Ticket> tickets = new ArrayList<Ticket>();
 
     public Employee() 
     {
         userRole = "Employee";
-        this.tickets = new ArrayList<Ticket>();
     }
 
     public ArrayList<Ticket> getTickets() {
@@ -20,11 +19,11 @@ public class Employee extends User {
         this.tickets = tickets;
     }
 
-    public void createTicket(double amount, String description) {
-        Ticket newTicket;
-      //  newTicket.setAmount(amount);
-      //  newTicket.setDescription(description);
-     //   this.tickets.add(newTicket);
+    public void createTicket(int amount, String description) {
+        Ticket newTicket = new Ticket();
+        newTicket.setAmount(amount);
+        newTicket.setDescription(description);
+        this.tickets.add(newTicket);
     }
     
 }
