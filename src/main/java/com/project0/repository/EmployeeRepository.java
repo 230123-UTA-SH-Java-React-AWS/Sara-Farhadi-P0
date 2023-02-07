@@ -40,14 +40,14 @@ public class EmployeeRepository {
 
     public void registration(Employee employee)
     {
-        String sql = "insert into employee (userID, userEmail, userPassword, userRole) values (?, ?, ?, ?)";
+        String sql = "insert into employee (userEmail, userPassword, userRole, userID) values (?, ?, ?, ?)";
         try (Connection con = ConnectionUtil.getConnection()) {
             PreparedStatement prstmt = con.prepareStatement(sql);
             if (employeeExist(employee) == false){
-                prstmt.setString(1, employee.getUserID());
-                prstmt.setString(2, employee.getUserEmail());
-                prstmt.setString(3, employee.getUserPassword());
-                prstmt.setString(4, employee.getUserRole());
+                prstmt.setString(1, employee.getUserEmail());
+                prstmt.setString(2, employee.getUserPassword());
+                prstmt.setString(3, employee.getUserRole());
+                prstmt.setString(4, employee.getUserID());
             } else {
                 System.out.println("Employee Already Exist!");
             }
@@ -68,12 +68,12 @@ public class EmployeeRepository {
             if (!rs.next()) {
                 return null;
             }
-            else if (employee.getUserPassword().equals(rs.getString(3))) {
-                CurrentUser.setUserID(rs.getString("userID"));
+            else if (employee.getUserPassword().equals(rs.getString(2))) {
                 CurrentUser.setUserEmail(rs.getString("userEmail"));
                 CurrentUser.setUserPassword(rs.getString("userPassword"));
                 CurrentUser.setUserRole(rs.getString("userRole"));
-                //CurrentUser.setTicket(getTicketByUserEmail(CurrentUser.setUserEmail()));
+                CurrentUser.setUserID(rs.getString("userID"));
+                CurrentUser.setTickets(getUserTickets(CurrentUser.getUserEmail()));
             }
             rs.close();
             prstmt.close();
@@ -105,11 +105,56 @@ public class EmployeeRepository {
         return listOfEmployee;
     }
 
-    // private List<Ticket> getTicketByPokeId(int pokeid)
-    // {
-    //     //Implementation details
-    //     return new ArrayList<>();
-    // }
+    public List<Ticket> getUserTickets (String userEmailID)
+    {
+        String sql = "select * from ticket where userEmail = ?";
+        List<Ticket> allTickets = new ArrayList<Ticket>();
+        try (Connection con = ConnectionUtil.getConnection()) {
+            PreparedStatement prstmt = con.prepareStatement(sql);
+            prstmt.setString(1, userEmailID);
+            ResultSet rs = prstmt.executeQuery();
+            while (rs.next()){
+                Ticket userTicket = new Ticket();
+                userTicket.setUserEmail(rs.getString("userEmail"));
+                userTicket.setAmount(rs.getInt("amount"));
+                userTicket.setDescription(rs.getString("description"));
+                userTicket.setStatus(rs.getString("status"));
+                userTicket.setProcessed(rs.getBoolean("processed"));
+                allTickets.add(userTicket);
+            }
+            rs.close();
+            prstmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return allTickets;
+    }
+
+    public List<Ticket> getFilteredUserTickets (String userEmailID, String filter)
+    {
+        String sql = "select * from ticket where userEmail = ? and status = ?";
+        List<Ticket> allTickets = new ArrayList<Ticket>();
+        try (Connection con = ConnectionUtil.getConnection()) {
+            PreparedStatement prstmt = con.prepareStatement(sql);
+            prstmt.setString(1, userEmailID);
+            prstmt.setString(2, filter);
+            ResultSet rs = prstmt.executeQuery();
+            while (rs.next()){
+                Ticket userTicket = new Ticket();
+                userTicket.setUserEmail(rs.getString("userEmail"));
+                userTicket.setAmount(rs.getInt("amount"));
+                userTicket.setDescription(rs.getString("description"));
+                userTicket.setStatus(rs.getString("status"));
+                userTicket.setProcessed(rs.getBoolean("processed"));
+                allTickets.add(userTicket);
+            }
+            rs.close();
+            prstmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return allTickets;
+    }
 
     private boolean employeeExist (Employee employee) throws SQLException
     {

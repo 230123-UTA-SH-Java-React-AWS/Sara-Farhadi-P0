@@ -7,8 +7,12 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
 import com.project0.model.Employee;
+import com.project0.model.Ticket;
 import com.project0.service.EmployeeService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
@@ -29,6 +33,7 @@ public class EmployeeController implements HttpHandler {
                 getRequest(exchange);
                 break;
             case "PUT":
+                putRequest(exchange); //To filter 
                 break;
             case "DELETE":
                 break;
@@ -82,8 +87,34 @@ public class EmployeeController implements HttpHandler {
             response = mapper.writeValueAsString(currentUser);
             exchange.sendResponseHeaders(200, response.getBytes().length);
             os.write(response.getBytes());
-          //  exchange.getResponseHeaders().add("Location", "http://localhost:8000/ticket");
         }
+        os.close();
+    }
+
+    private void putRequest(HttpExchange exchange) throws IOException
+    {
+        String userEmail;
+        String filter;
+        String response = "";
+        JsonNode jsonDoc;
+        List<Ticket> allTickets = new ArrayList<Ticket>();
+        InputStream is = exchange.getRequestBody();
+        StringBuilder textBuilder = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
+        OutputStream os = exchange.getResponseBody();
+        try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
+            int c = 0;
+            while ((c = reader.read()) != -1) {
+                textBuilder.append((char)c);
+            }
+        }
+        jsonDoc = mapper.readTree(textBuilder.toString()); 
+        userEmail = (jsonDoc.get("userEmail").toString());
+        filter = (jsonDoc.get("filter").toString());
+        allTickets = serv.filterTickets(userEmail, filter);
+        response = mapper.writeValueAsString(allTickets);
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+        os.write(response.getBytes());
         os.close();
     }
 

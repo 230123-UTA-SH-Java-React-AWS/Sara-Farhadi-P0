@@ -3,7 +3,7 @@ import java.text.SimpleDateFormat;
 
 public class Ticket {
 
-    private String userID; 
+    private String userEmail; 
     private String ticketID ;
     private int amount ;
     private String description;
@@ -18,12 +18,12 @@ public class Ticket {
         ticketID = new SimpleDateFormat("yyyyMMddHHmmss").format(new java.util.Date());
     }
 
-    public String getUserID() {
-        return userID;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public String getTicketID() {

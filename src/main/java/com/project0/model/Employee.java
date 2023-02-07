@@ -4,18 +4,18 @@ import java.util.List;
 
 public class Employee extends User { 
 
-    private ArrayList<Ticket> tickets = new ArrayList<Ticket>();
+    private List<Ticket> tickets = new ArrayList<Ticket>();
 
     public Employee() 
     {
         userRole = "Employee";
     }
 
-    public ArrayList<Ticket> getTickets() {
+    public List<Ticket> getTickets() {
         return tickets;
     }
 
-    public void setTickets(ArrayList<Ticket> tickets) {
+    public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
 

@@ -1,11 +1,13 @@
 package com.project0.service;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import org.codehaus.jackson.JsonParseException;
 import org.codehaus.jackson.map.JsonMappingException;
 import org.codehaus.jackson.map.ObjectMapper;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.project0.model.Employee;
+import com.project0.model.Ticket;
 import com.project0.repository.EmployeeRepository;
 
 public class EmployeeService {
@@ -44,9 +46,17 @@ public class EmployeeService {
         return jsonString;
     }
 
-    public Employee getCurrentEmployee(Employee currentUser) {
+    public Employee getCurrentEmployee (Employee currentUser) 
+    {
         Employee currentEmployee = repo.login(currentUser);
         return currentEmployee;
+    }
+
+    public List<Ticket> filterTickets (String userEmail, String filter)
+    {
+        List<Ticket> allTickets = new ArrayList<Ticket>();
+        allTickets = repo.getFilteredUserTickets(userEmail, filter);
+        return allTickets;
     }
 
 }
