@@ -18,12 +18,5 @@ public class Employee extends User {
     public void setTickets(List<Ticket> tickets) {
         this.tickets = tickets;
     }
-
-    public void createTicket(int amount, String description) {
-        Ticket newTicket = new Ticket();
-        newTicket.setAmount(amount);
-        newTicket.setDescription(description);
-        this.tickets.add(newTicket);
-    }
     
 }

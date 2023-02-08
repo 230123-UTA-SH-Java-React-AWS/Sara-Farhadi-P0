@@ -31,9 +31,10 @@ public class TicketController implements HttpHandler {
                 postRequest(exchange);  // Employee user create a new ticket
                 break;
             case "GET":
-                getRequest(exchange);   // All the tickets of all the users
+                getRequest(exchange);   // All the pending tickets of all the users
                 break;
             case "PUT":
+                putProcessTicketRequest(exchange);  // Managers process tickets
                 break;
             case "DELETE":
                 break;
@@ -68,6 +69,41 @@ public class TicketController implements HttpHandler {
         exchange.sendResponseHeaders(200, jsonCurrentList.getBytes().length);
         OutputStream os = exchange.getResponseBody();
         os.write(jsonCurrentList.getBytes());
+        os.close();
+    }
+
+    private void putProcessTicketRequest(HttpExchange exchange) throws IOException
+    {
+        String managerEmail;
+        String managerPassword;
+        String ticketID;
+        String status;
+        String response = "";
+        JsonNode jsonDoc;
+        Ticket processTicket = new Ticket();
+        InputStream is = exchange.getRequestBody();
+        StringBuilder textBuilder = new StringBuilder();
+        ObjectMapper mapper = new ObjectMapper();
+        OutputStream os = exchange.getResponseBody();
+        try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
+            int c = 0;
+            while ((c = reader.read()) != -1) {
+                textBuilder.append((char)c);
+            }
+        }
+        jsonDoc = mapper.readTree(textBuilder.toString()); 
+        managerEmail = (jsonDoc.get("userEmail").toString());
+        managerEmail = managerEmail.replace("\"", "");
+        managerPassword = (jsonDoc.get("userPassword").toString());
+        managerPassword = managerPassword.replace("\"", "");
+        ticketID = (jsonDoc.get("ticketID").toString());
+        ticketID = ticketID.replace("\"", "");
+        status = (jsonDoc.get("status").toString());
+        status = status.replace("\"", "");
+        processTicket = ts.updateTicket(managerEmail, managerPassword, ticketID, status);
+        response = mapper.writeValueAsString(processTicket);
+        exchange.sendResponseHeaders(200, response.getBytes().length);
+        os.write(response.getBytes());
         os.close();
     }
 

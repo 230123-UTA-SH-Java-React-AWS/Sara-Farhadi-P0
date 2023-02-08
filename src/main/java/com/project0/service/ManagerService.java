@@ -29,7 +29,7 @@ public class ManagerService {
         }
     }
 
-    public Manager getCurrentManager (Manager currentUser) 
+    public Manager getCurrentManager(Manager currentUser) 
     {
         Manager currentManager = mr.login(currentUser);
         return currentManager;

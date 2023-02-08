@@ -43,4 +43,17 @@ public class TicketService {
         return jsonString;
     }
 
+    public Ticket updateTicket(String managerEmail, String managerPassword, String ticketID, String status)
+    {
+        Ticket processedTicket = new Ticket();
+        boolean managerValidation = tr.validateManager(managerEmail,managerPassword);
+        if (managerValidation == true) {
+            processedTicket = tr.processTicket(ticketID, status);
+            System.out.println("Ticket Processed");
+        } else {
+            System.out.println("Unable to process ticket");
+        }
+        return processedTicket;
+    }
+
 }
