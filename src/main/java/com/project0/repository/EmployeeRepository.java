@@ -83,28 +83,6 @@ public class EmployeeRepository {
         return CurrentUser;
     }
 
-    public List<Employee> getAllEmployee() 
-    {
-        String sql = "select * from employee";
-        List<Employee> listOfEmployee = new ArrayList<Employee>();
-        try (Connection con = ConnectionUtil.getConnection()) {
-            Statement stmt = con.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                Employee employees = new Employee();
-                employees.setUserID(rs.getString(1));
-                employees.setUserEmail(rs.getString(2));
-                employees.setUserPassword(rs.getString(3));
-                employees.setUserRole(rs.getString(4));
-              //  newPokemon.setAbilities(getAbilityByPokeId(newPokemon.getPokeId()));
-                listOfEmployee.add(employees);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return listOfEmployee;
-    }
-
     public List<Ticket> getUserTickets (String userEmailID)
     {
         String sql = "select * from ticket where userEmail = ?";

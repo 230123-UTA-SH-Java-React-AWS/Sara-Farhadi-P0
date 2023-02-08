@@ -28,10 +28,10 @@ public class TicketController implements HttpHandler {
         String verb = exchange.getRequestMethod(); 
         switch (verb) {
             case "POST":
-                postRequest(exchange);
+                postRequest(exchange);  // Employee user create a new ticket
                 break;
             case "GET":
-                getRequest(exchange);
+                getRequest(exchange);   // All the tickets of all the users
                 break;
             case "PUT":
                 break;

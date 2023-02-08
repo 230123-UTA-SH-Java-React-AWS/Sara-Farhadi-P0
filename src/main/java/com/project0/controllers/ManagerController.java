@@ -7,19 +7,16 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-import com.project0.model.Employee;
-import com.project0.model.Ticket;
-import com.project0.service.EmployeeService;
+import com.project0.model.Manager;
+import com.project0.service.ManagerService;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
-public class EmployeeController implements HttpHandler {
+public class ManagerController implements HttpHandler {
 
-    private final EmployeeService serv = new EmployeeService();
+    private final ManagerService ms = new ManagerService();
+    ObjectMapper mapper = new ObjectMapper();
 
     @Override
     public void handle(HttpExchange exchange) throws IOException 
@@ -27,13 +24,13 @@ public class EmployeeController implements HttpHandler {
         String verb = exchange.getRequestMethod(); 
         switch (verb) {
             case "POST":
-                postRequest(exchange);  // Employee User Registration
+                postRequest(exchange);  // Manager User Registration
                 break;
             case "GET":
-                getRequest(exchange);   // Employee User Login and view all their tickets
+                getRequest(exchange);   // Manager User Loin
                 break;
             case "PUT":
-                putRequest(exchange);   // Employee User to filter their own tickets by status (Pending, Approved, Denied)
+                getAllRequest(exchange);    // Manager request list of all employee users
                 break;
             case "DELETE":
                 break;
@@ -55,8 +52,7 @@ public class EmployeeController implements HttpHandler {
             }
         } 
         exchange.sendResponseHeaders(200, textBuilder.toString().getBytes().length);
-        EmployeeService employeeService = new EmployeeService();
-        employeeService.sendToEmployeeTable(textBuilder.toString());
+        ms.sendToEmployeeTable(textBuilder.toString());
         OutputStream os = exchange.getResponseBody();
         os.write(textBuilder.toString().getBytes());
         os.close();
@@ -67,7 +63,6 @@ public class EmployeeController implements HttpHandler {
         String response = "";
         InputStream is = exchange.getRequestBody();
         StringBuilder textBuilder = new StringBuilder();
-        ObjectMapper mapper = new ObjectMapper();
         OutputStream os = exchange.getResponseBody();
         try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
             int c = 0;
@@ -75,8 +70,8 @@ public class EmployeeController implements HttpHandler {
                 textBuilder.append((char)c);
             }
         } 
-        Employee userInfo = mapper.readValue(textBuilder.toString(), Employee.class);
-        Employee currentUser = serv.getCurrentEmployee(userInfo);
+        Manager userInfo = mapper.readValue(textBuilder.toString(), Manager.class);
+        Manager currentUser = ms.getCurrentManager(userInfo);
         if (currentUser == null) {
             response = "Incorrect Email or Password";
             exchange.sendResponseHeaders(404, response.getBytes().length);
@@ -90,35 +85,15 @@ public class EmployeeController implements HttpHandler {
         os.close();
     }
 
-    private void putRequest(HttpExchange exchange) throws IOException
+    private void getAllRequest(HttpExchange exchange) throws IOException 
     {
-        String userEmail;
-        String filter;
-        String response = "";
-        JsonNode jsonDoc;
-        List<Ticket> allTickets = new ArrayList<Ticket>();
-        InputStream is = exchange.getRequestBody();
-        StringBuilder textBuilder = new StringBuilder();
-        ObjectMapper mapper = new ObjectMapper();
+        String jsonCurrentList = ms.getEmployees();
+        exchange.sendResponseHeaders(200, jsonCurrentList.getBytes().length);
         OutputStream os = exchange.getResponseBody();
-        try (Reader reader = new BufferedReader(new InputStreamReader(is, Charset.forName(StandardCharsets.UTF_8.name())))) {
-            int c = 0;
-            while ((c = reader.read()) != -1) {
-                textBuilder.append((char)c);
-            }
-        }
-        jsonDoc = mapper.readTree(textBuilder.toString()); 
-        userEmail = (jsonDoc.get("userEmail").toString());
-        userEmail = userEmail.replace("\"", "");
-        filter = (jsonDoc.get("filter").toString());
-        filter = filter.replace("\"", "");
-        allTickets = serv.filterTickets(userEmail, filter);
-        response = mapper.writeValueAsString(allTickets);
-        exchange.sendResponseHeaders(200, response.getBytes().length);
-        os.write(response.getBytes());
+        os.write(jsonCurrentList.getBytes());
         os.close();
     }
-
+    
     private void notSupported(HttpExchange exchange) throws IOException 
     {
         String noResponse = "HTTP Not Supported";
