@@ -43,7 +43,7 @@ public class EmployeeRepository {
         String sql = "insert into employee (userEmail, userPassword, userRole, userID) values (?, ?, ?, ?)";
         try (Connection con = ConnectionUtil.getConnection()) {
             PreparedStatement prstmt = con.prepareStatement(sql);
-            if (employeeExist(employee) == false){
+            if (employeeExist(employee) == false){  //Check if employee already exist or not
                 prstmt.setString(1, employee.getUserEmail());
                 prstmt.setString(2, employee.getUserPassword());
                 prstmt.setString(3, employee.getUserRole());
@@ -66,14 +66,18 @@ public class EmployeeRepository {
             prstmt.setString(1, employee.getUserEmail());
             ResultSet rs = prstmt.executeQuery();
             if (!rs.next()) {
+                System.out.println("Employee does not exist!");
                 return null;
-            }
+            }   // check if the password is correct
             else if (employee.getUserPassword().equals(rs.getString(2))) {
                 CurrentUser.setUserEmail(rs.getString("userEmail"));
                 CurrentUser.setUserPassword(rs.getString("userPassword"));
                 CurrentUser.setUserRole(rs.getString("userRole"));
                 CurrentUser.setUserID(rs.getString("userID"));
                 CurrentUser.setTickets(getUserTickets(CurrentUser.getUserEmail()));
+            } else {
+                System.out.println("Wrong Password!");
+                return null;
             }
             rs.close();
             prstmt.close();

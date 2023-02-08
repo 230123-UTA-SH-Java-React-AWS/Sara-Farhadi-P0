@@ -27,12 +27,13 @@ public class ManagerController implements HttpHandler {
                 postRequest(exchange);  // Manager User Registration
                 break;
             case "GET":
-                getRequest(exchange);   // Manager User Loin
+                getRequest(exchange);   // Manager User Login
                 break;
             case "PUT":
                 getAllRequest(exchange);    // Manager request list of all employee users
                 break;
             case "DELETE":
+                notSupported(exchange);
                 break;
             default:
                 notSupported(exchange);

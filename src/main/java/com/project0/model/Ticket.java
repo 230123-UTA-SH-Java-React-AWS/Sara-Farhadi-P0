@@ -66,4 +66,9 @@ public class Ticket {
         this.processed = processed;
     }
 
+    @Override
+    public String toString() {
+        return "Ticket [Created by User Email: " + userEmail + ", Ticket ID: " + ticketID + ", Amount: " + amount + ", Description: " + description + ", Status: " + status + ", Processed: " + processed + "]";
+    }
+
 }

@@ -36,6 +36,7 @@ public class EmployeeController implements HttpHandler {
                 putRequest(exchange);   // Employee User to filter their own tickets by status (Pending, Approved, Denied)
                 break;
             case "DELETE":
+                notSupported(exchange);
                 break;
             default:
                 notSupported(exchange);

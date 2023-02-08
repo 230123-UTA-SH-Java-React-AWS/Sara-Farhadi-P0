@@ -54,7 +54,7 @@ public class TicketRepossitory {
     {
         Ticket processedTicket = new Ticket();
         String sql = "update ticket set processed = true, status = ? where ticketID = ?";
-        if (isProcessed(ticketID) == false) {
+        if (isProcessed(ticketID) == false) {   // Check if the ticket is already processed
             try (Connection con = ConnectionUtil.getConnection()) {
                 PreparedStatement prstmt = con.prepareStatement(sql);
                 prstmt.setString(1, status);
@@ -94,7 +94,7 @@ public class TicketRepossitory {
         return isManager;
     }
 
-    private Ticket findTicket(String ticketID)
+    private Ticket findTicket(String ticketID)  // Find the ticket by ticket ID
     {
         Ticket foundTicket = new Ticket();
         String sql = "select * from ticket where ticketID = ?";

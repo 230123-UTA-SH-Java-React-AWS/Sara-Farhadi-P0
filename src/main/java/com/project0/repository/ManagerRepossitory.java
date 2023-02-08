@@ -17,13 +17,13 @@ public class ManagerRepossitory {
         String sql = "insert into employee (userEmail, userPassword, userRole, userID) values (?, ?, ?, ?)";
         try (Connection con = ConnectionUtil.getConnection()) {
             PreparedStatement prstmt = con.prepareStatement(sql);
-            if (managerExist(manager) == false){
+            if (managerExist(manager) == false){    //Check if manager already exist or not
                 prstmt.setString(1, manager.getUserEmail());
                 prstmt.setString(2, manager.getUserPassword());
                 prstmt.setString(3, manager.getUserRole());
                 prstmt.setString(4, manager.getUserID());
             } else {
-                System.out.println("manager Already Exist!");
+                System.out.println("Manager Already Exist!");
             }
             prstmt.execute();
         } catch (Exception e) {
@@ -40,13 +40,17 @@ public class ManagerRepossitory {
             prstmt.setString(1, manager.getUserEmail());
             ResultSet rs = prstmt.executeQuery();
             if (!rs.next()) {
+                System.out.println("Employee does not exist!");
                 return null;
-            }
+            }   // check if the password is correct
             else if (manager.getUserPassword().equals(rs.getString(2))) {
                 CurrentUser.setUserEmail(rs.getString("userEmail"));
                 CurrentUser.setUserPassword(rs.getString("userPassword"));
                 CurrentUser.setUserRole(rs.getString("userRole"));
                 CurrentUser.setUserID(rs.getString("userID"));
+            } else {
+                System.out.println("Wrong Password!");
+                return null;
             }
             rs.close();
             prstmt.close();

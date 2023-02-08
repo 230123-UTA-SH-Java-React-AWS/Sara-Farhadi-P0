@@ -47,7 +47,7 @@ public class TicketService {
     {
         Ticket processedTicket = new Ticket();
         boolean managerValidation = tr.validateManager(managerEmail,managerPassword);
-        if (managerValidation == true) {
+        if (managerValidation == true) {    // Check if Manager exist and password is correct
             processedTicket = tr.processTicket(ticketID, status);
             System.out.println("Ticket Processed");
         } else {
